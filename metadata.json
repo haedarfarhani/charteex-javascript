@@ -1,0 +1,8 @@
+{
+  "name": "SmartChart",
+  "description": "Professional zero-dependency JavaScript charting library demo and visualization playground",
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ],
+  "permissions": []
+}

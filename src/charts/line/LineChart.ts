@@ -33,6 +33,7 @@ export class LineChart extends Chart {
       fillOpacity: options.line?.fillOpacity ?? 0.1,
       strokeWidth: options.line?.strokeWidth ?? 2
     };
+    this.updateScalesFromData();
   }
 
   protected override updateScalesFromData(): void {

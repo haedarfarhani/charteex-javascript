@@ -1,3 +1,5 @@
+import type { DesignTokens } from '../design/tokens';
+
 export type ChartType =
   | 'line'
   | 'bar'
@@ -20,7 +22,17 @@ export type ChartType =
 
 export type RendererType = 'svg' | 'canvas' | 'auto';
 
-export type ThemeMode = 'light' | 'dark';
+export type ThemeMode =
+  | 'default'
+  | 'light'
+  | 'dark'
+  | 'midnight'
+  | 'minimal'
+  | 'professional'
+  | 'financial'
+  | 'glass'
+  | 'enterprise'
+  | 'system';
 
 export type Direction = 'ltr' | 'rtl';
 
@@ -43,7 +55,26 @@ export interface DataPoint {
   close?: number;
   volume?: number;
   size?: number;
+  color?: string;
+  min?: number;
+  q1?: number;
+  median?: number;
+  q3?: number;
+  max?: number;
+  values?: number[];
   [key: string]: unknown;
+}
+
+export interface SeriesPointConfig {
+  visible?: boolean;
+  radius?: number;
+  hoverRadius?: number;
+}
+
+export interface SeriesAreaConfig {
+  visible?: boolean;
+  opacity?: number;
+  fill?: 'solid' | 'gradient';
 }
 
 export interface Series {
@@ -51,6 +82,12 @@ export interface Series {
   data: DataPoint[];
   color?: string;
   visible?: boolean;
+  opacity?: number;
+  hoverOpacity?: number;
+  lineWidth?: number;
+  lineStyle?: 'solid' | 'dashed' | 'dotted';
+  point?: SeriesPointConfig;
+  area?: SeriesAreaConfig;
   [key: string]: unknown;
 }
 
@@ -109,6 +146,7 @@ export interface TooltipConfig {
   enabled?: boolean;
   mode?: 'nearest' | 'index' | 'dataset';
   formatter?: (value: DataPoint, context: TooltipContext) => string;
+  render?: (context: TooltipContext) => string | HTMLElement;
   position?: 'auto' | 'top' | 'bottom' | 'left' | 'right';
   background?: string;
   color?: string;
@@ -116,6 +154,8 @@ export interface TooltipConfig {
   padding?: number;
   fontSize?: number;
   fontFamily?: string;
+  theme?: 'light' | 'dark' | 'auto';
+  followCursor?: boolean;
 }
 
 export interface TooltipContext {
@@ -149,6 +189,7 @@ export interface ZoomConfig {
 export interface PanConfig {
   enabled?: boolean;
   mode?: 'x' | 'y' | 'xy';
+  drag?: boolean;
 }
 
 export interface AnimationConfig {
@@ -165,6 +206,24 @@ export type EasingType =
   | 'easeInOut'
   | 'cubic'
   | 'spring';
+
+export interface ContainerStyleConfig {
+  background?: string;
+  border?: boolean | string;
+  borderRadius?: number;
+  padding?: number;
+  shadow?: boolean | string;
+}
+
+export interface LegendConfig {
+  enabled?: boolean;
+  position?: 'top' | 'bottom' | 'left' | 'right';
+  align?: 'start' | 'center' | 'end';
+  orientation?: 'horizontal' | 'vertical';
+  interactive?: boolean;
+  onSeriesClick?: (seriesIndex: number, visible: boolean) => void;
+  onSeriesHover?: (seriesIndex: number | null) => void;
+}
 
 export interface Theme {
   name: string;
@@ -184,12 +243,14 @@ export interface Theme {
   seriesColors: string[];
   fontFamily: string;
   fontSize: number;
+  tokens?: import('../design/tokens').DesignTokens;
 }
 
 export interface ChartOptions {
   type: ChartType;
   data: ChartData;
   container: string | HTMLElement;
+  containerStyle?: ContainerStyleConfig;
   width?: number | string;
   height?: number | string;
   renderer?: RendererType;
@@ -208,17 +269,14 @@ export interface ChartOptions {
   crosshair?: CrosshairConfig;
   zoom?: ZoomConfig;
   pan?: PanConfig;
-  legend?: {
-    enabled?: boolean;
-    position?: 'top' | 'bottom' | 'left' | 'right';
-    align?: 'start' | 'center' | 'end';
-  };
+  legend?: LegendConfig;
   title?: {
     text?: string;
     fontSize?: number;
     fontWeight?: string;
     color?: string;
     padding?: number;
+    align?: 'left' | 'center' | 'right';
   };
   accessibility?: {
     enabled?: boolean;

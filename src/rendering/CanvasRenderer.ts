@@ -59,6 +59,9 @@ export class CanvasRenderer implements Renderer {
   }
 
   private createRenderElement(draw: (ctx: CanvasRenderingContext2D) => void, type: string, bounds: { x: number; y: number; width: number; height: number }): CanvasRenderElement {
+    if (this.ctx) {
+      draw(this.ctx);
+    }
     const element: CanvasRenderElement = {
       id: this.generateId(),
       type,
@@ -270,7 +273,7 @@ export class CanvasRenderer implements Renderer {
 
   render(): void {
     if (!this.ctx) return;
-    this.clear();
+    this.ctx.clearRect(0, 0, this.width, this.height);
     for (const element of this.elements) {
       element._draw(this.ctx);
     }

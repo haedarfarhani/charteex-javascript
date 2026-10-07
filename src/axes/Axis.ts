@@ -21,7 +21,7 @@ export function renderAxis(options: AxisRenderOptions): RenderElement[] {
   if (axisLine) elements.push(axisLine);
 
   for (const tick of ticks) {
-    const tickElements = createTick(tick, position, bounds, theme, config, renderer, showGrid);
+    const tickElements = createTick(scale, tick, position, bounds, theme, config, renderer, showGrid);
     elements.push(...tickElements);
   }
 
@@ -64,6 +64,7 @@ function createAxisLine(
 }
 
 function createTick(
+  scale: Scale,
   tick: { value: number | Date | string; label: string },
   position: string,
   bounds: ChartBounds,
@@ -74,7 +75,7 @@ function createTick(
 ): RenderElement[] {
   const elements: RenderElement[] = [];
   const { plot } = bounds;
-  const value = typeof tick.value === 'number' ? tick.value : tick.value instanceof Date ? tick.value.getTime() : 0;
+  const value = scale.convert(tick.value);
 
   let tickX = 0, tickY = 0;
   let labelX = 0, labelY = 0;

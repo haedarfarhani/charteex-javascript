@@ -42,11 +42,10 @@ export class SVGRenderer implements Renderer {
 
   clear(): void {
     if (this.svg) {
-      while (this.svg.firstChild) {
-        if (this.svg.firstChild !== this.defs) {
-          this.svg.removeChild(this.svg.firstChild);
-        } else {
-          break;
+      const children = Array.from(this.svg.childNodes);
+      for (const child of children) {
+        if (child !== this.defs) {
+          this.svg.removeChild(child);
         }
       }
       if (this.defs) {
@@ -65,6 +64,7 @@ export class SVGRenderer implements Renderer {
     for (const [key, value] of Object.entries(attributes)) {
       element.setAttribute(key, String(value));
     }
+    this.svg?.appendChild(element);
     return element;
   }
 

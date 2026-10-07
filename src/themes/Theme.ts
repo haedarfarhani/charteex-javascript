@@ -1,67 +1,162 @@
-import type { Theme } from '../core/ChartConfig';
+import type { Theme, ThemeMode } from '../core/ChartConfig';
+import type { DesignTokens } from '../design/tokens';
+import {
+  LightThemeTokens,
+  DarkThemeTokens,
+  MidnightThemeTokens,
+  MinimalThemeTokens,
+  ProfessionalThemeTokens,
+  FinancialThemeTokens,
+  GlassThemeTokens,
+  EnterpriseThemeTokens
+} from './presets';
 
-export const LightTheme: Theme = {
-  name: 'light',
-  background: '#ffffff',
-  text: '#1f2937',
-  grid: '#e5e7eb',
-  axis: '#9ca3af',
-  primary: '#2563eb',
-  secondary: '#64748b',
-  accent: '#f59e0b',
-  success: '#10b981',
-  warning: '#f59e0b',
-  danger: '#ef4444',
-  tooltipBackground: '#1f2937',
-  tooltipColor: '#ffffff',
-  crosshairColor: '#9ca3af',
-  seriesColors: [
-    '#2563eb',
-    '#10b981',
-    '#f59e0b',
-    '#ef4444',
-    '#8b5cf6',
-    '#ec4899',
-    '#06b6d4',
-    '#84cc16'
-  ],
-  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontSize: 12
-};
-
-export const DarkTheme: Theme = {
-  name: 'dark',
-  background: '#111827',
-  text: '#f9fafb',
-  grid: '#374151',
-  axis: '#9ca3af',
-  primary: '#3b82f6',
-  secondary: '#94a3b8',
-  accent: '#fbbf24',
-  success: '#34d399',
-  warning: '#fbbf24',
-  danger: '#f87171',
-  tooltipBackground: '#1f2937',
-  tooltipColor: '#ffffff',
-  crosshairColor: '#6b7280',
-  seriesColors: [
-    '#3b82f6',
-    '#34d399',
-    '#fbbf24',
-    '#f87171',
-    '#a78bfa',
-    '#f472b6',
-    '#22d3ee',
-    '#a3e635'
-  ],
-  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  fontSize: 12
-};
-
-export function createTheme(base: Theme, overrides: Partial<Theme>): Theme {
+export function tokensToTheme(name: string, tokens: DesignTokens): Theme {
   return {
-    ...base,
-    ...overrides,
-    seriesColors: overrides.seriesColors ?? base.seriesColors
+    name,
+    background: tokens.colors.background.canvas,
+    text: tokens.colors.text.primary,
+    grid: tokens.colors.grid.major,
+    axis: tokens.colors.axis.label,
+    primary: tokens.colors.series[0] ?? '#2563eb',
+    secondary: tokens.colors.text.secondary,
+    accent: tokens.colors.series[2] ?? '#f59e0b',
+    success: tokens.colors.semantic.positive,
+    warning: tokens.colors.semantic.warning,
+    danger: tokens.colors.semantic.negative,
+    tooltipBackground: tokens.colors.tooltip.background,
+    tooltipColor: tokens.colors.tooltip.text,
+    crosshairColor: tokens.colors.axis.tick,
+    seriesColors: [...tokens.colors.series],
+    fontFamily: tokens.typography.fontFamily,
+    fontSize: tokens.typography.axis.fontSize,
+    tokens
   };
+}
+
+export const LightTheme: Theme = tokensToTheme('light', LightThemeTokens);
+export const DarkTheme: Theme = tokensToTheme('dark', DarkThemeTokens);
+export const MidnightTheme: Theme = tokensToTheme('midnight', MidnightThemeTokens);
+export const MinimalTheme: Theme = tokensToTheme('minimal', MinimalThemeTokens);
+export const ProfessionalTheme: Theme = tokensToTheme('professional', ProfessionalThemeTokens);
+export const FinancialTheme: Theme = tokensToTheme('financial', FinancialThemeTokens);
+export const GlassTheme: Theme = tokensToTheme('glass', GlassThemeTokens);
+export const EnterpriseTheme: Theme = tokensToTheme('enterprise', EnterpriseThemeTokens);
+
+export const themeRegistry: Record<string, Theme> = {
+  default: LightTheme,
+  light: LightTheme,
+  dark: DarkTheme,
+  midnight: MidnightTheme,
+  minimal: MinimalTheme,
+  professional: ProfessionalTheme,
+  financial: FinancialTheme,
+  glass: GlassTheme,
+  enterprise: EnterpriseTheme
+};
+
+export function getSystemTheme(): Theme {
+  if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return DarkTheme;
+  }
+  return LightTheme;
+}
+
+export function createTheme(overrides: Partial<Theme> & { tokens?: Partial<DesignTokens> }): Theme {
+  const base = (overrides.name && themeRegistry[overrides.name]) ? themeRegistry[overrides.name] : LightTheme;
+  const baseTokens = base?.tokens ?? LightThemeTokens;
+  const mergedTokens: DesignTokens = {
+    colors: {
+      ...baseTokens.colors,
+      ...(overrides.tokens?.colors ?? {})
+    },
+    typography: {
+      ...baseTokens.typography,
+      ...(overrides.tokens?.typography ?? {})
+    },
+    spacing: {
+      ...baseTokens.spacing,
+      ...(overrides.tokens?.spacing ?? {})
+    },
+    radius: {
+      ...baseTokens.radius,
+      ...(overrides.tokens?.radius ?? {})
+    },
+    shadows: {
+      ...baseTokens.shadows,
+      ...(overrides.tokens?.shadows ?? {})
+    },
+    borders: {
+      ...baseTokens.borders,
+      ...(overrides.tokens?.borders ?? {})
+    },
+    animation: {
+      ...baseTokens.animation,
+      ...(overrides.tokens?.animation ?? {})
+    }
+  };
+
+  const generated = tokensToTheme(overrides.name ?? 'custom', mergedTokens);
+  return {
+    ...generated,
+    ...overrides,
+    seriesColors: overrides.seriesColors ?? overrides.tokens?.colors?.series ?? generated.seriesColors,
+    tokens: mergedTokens
+  };
+}
+
+export function extendTheme(
+  baseTheme: ThemeMode | Theme,
+  overrides: Partial<Theme> & { tokens?: Partial<DesignTokens> }
+): Theme {
+  const resolvedBase = typeof baseTheme === 'string'
+    ? (baseTheme === 'system' ? getSystemTheme() : (themeRegistry[baseTheme] ?? LightTheme))
+    : baseTheme;
+
+  const baseTokens = resolvedBase.tokens ?? LightThemeTokens;
+  const mergedTokens: DesignTokens = {
+    colors: {
+      ...baseTokens.colors,
+      ...(overrides.tokens?.colors ?? {})
+    },
+    typography: {
+      ...baseTokens.typography,
+      ...(overrides.tokens?.typography ?? {})
+    },
+    spacing: {
+      ...baseTokens.spacing,
+      ...(overrides.tokens?.spacing ?? {})
+    },
+    radius: {
+      ...baseTokens.radius,
+      ...(overrides.tokens?.radius ?? {})
+    },
+    shadows: {
+      ...baseTokens.shadows,
+      ...(overrides.tokens?.shadows ?? {})
+    },
+    borders: {
+      ...baseTokens.borders,
+      ...(overrides.tokens?.borders ?? {})
+    },
+    animation: {
+      ...baseTokens.animation,
+      ...(overrides.tokens?.animation ?? {})
+    }
+  };
+
+  return createTheme({
+    ...resolvedBase,
+    ...overrides,
+    tokens: mergedTokens
+  });
+}
+
+export function resolveTheme(themeInput?: ThemeMode | Theme): Theme {
+  if (!themeInput) return LightTheme;
+  if (typeof themeInput === 'string') {
+    if (themeInput === 'system') return getSystemTheme();
+    return themeRegistry[themeInput] ?? LightTheme;
+  }
+  return themeInput;
 }
