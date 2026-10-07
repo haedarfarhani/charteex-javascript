@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartChart Demo</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f3f4f6;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #1f2937;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+    .chart-wrapper {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 16px;
+    }
+    #chart {
+      width: 100%;
+      height: 400px;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 8px 16px;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #f9fafb;
+      border-color: #9ca3af;
+    }
+    button.primary {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+    button.primary:hover {
+      background: #1d4ed8;
+    }
+    select, input {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SmartChart Demo</h1>
+    
+    <div class="controls">
+      <select id="themeSelect">
+        <option value="light">Light Theme</option>
+        <option value="dark">Dark Theme</option>
+      </select>
+      <button id="updateDataBtn">Update Data</button>
+      <button id="resizeBtn">Resize</button>
+    </div>
+
+    <div class="chart-wrapper">
+      <div class="chart-title">Line Chart</div>
+      <div id="chart"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createChart } from '/src/index.ts';
+
+    function generateData(count = 20) {
+      const data = [];
+      let value = 100;
+      for (let i = 0; i < count; i++) {
+        value += (Math.random() - 0.5) * 20;
+        value = Math.max(0, value);
+        data.push({ x: i, y: Math.round(value * 100) / 100 });
+      }
+      return data;
+    }
+
+    const chart = createChart('#chart', {
+      type: 'line',
+      data: {
+        series: [
+          {
+            name: 'Series 1',
+            data: generateData(20),
+            color: '#2563eb'
+          },
+          {
+            name: 'Series 2',
+            data: generateData(20),
+            color: '#10b981'
+          }
+        ]
+      },
+      width: '100%',
+      height: 400,
+      theme: 'light',
+      renderer: 'svg',
+      animation: { enabled: true, duration: 600, easing: 'easeOut' },
+      axis: {
+        x: {
+          type: 'linear',
+          position: 'bottom',
+          grid: true
+        },
+        y: {
+          type: 'linear',
+          position: 'left',
+          grid: true
+        }
+      },
+      tooltip: { enabled: true, mode: 'nearest' },
+      legend: { enabled: true, position: 'bottom' },
+      title: { text: 'Sample Line Chart', fontSize: 16 }
+    });
+
+    chart.render();
+
+    document.getElementById('themeSelect').addEventListener('change', (e) => {
+      chart.update({ theme: e.target.value });
+    });
+
+    document.getElementById('updateDataBtn').addEventListener('click', () => {
+      chart.setData({
+        series: [
+          { name: 'Series 1', data: generateData(20), color: '#2563eb' },
+          { name: 'Series 2', data: generateData(20), color: '#10b981' }
+        ]
+      });
+    });
+
+    document.getElementById('resizeBtn').addEventListener('click', () => {
+      chart.resize();
+    });
+
+    // Make chart globally accessible for debugging
+    window.chart = chart;
+  </script>
+</body>
+</html>
