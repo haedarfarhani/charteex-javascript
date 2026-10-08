@@ -224,11 +224,11 @@ export type {
   FinancialChartOptions
 };
 
-export function createChart(container: string | HTMLElement, options: Omit<ChartOptions, 'container'>): ChartInstance {
+export function createChart(container: string | HTMLElement, options: Omit<ChartOptions, 'container'> & Record<string, unknown>): ChartInstance {
   const chartOptions: ChartOptions = {
     ...options,
     container
-  };
+  } as ChartOptions;
 
   switch (chartOptions.type) {
     case 'line':
@@ -260,6 +260,8 @@ export function createChart(container: string | HTMLElement, options: Omit<Chart
       return new FunnelChart(chartOptions as FunnelChartOptions);
     case 'boxplot':
       return new BoxPlotChart(chartOptions as BoxPlotChartOptions);
+    case 'financial':
+      return new FinancialChart(chartOptions as FinancialChartOptions);
     case 'candlestick':
       if ((chartOptions as FinancialChartOptions).indicators || (chartOptions as FinancialChartOptions).volumePanel) {
         return new FinancialChart(chartOptions as FinancialChartOptions);
@@ -274,6 +276,7 @@ export function createChart(container: string | HTMLElement, options: Omit<Chart
   }
 }
 
+/** @deprecated Use `createChart` instead. Kept for backwards compatibility. */
 export const createCharteex = createChart;
 
 export const themes = {

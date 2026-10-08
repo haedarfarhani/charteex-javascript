@@ -18,7 +18,8 @@ export type ChartType =
   | 'boxplot'
   | 'candlestick'
   | 'ohlc'
-  | 'volume';
+  | 'volume'
+  | 'financial';
 
 export type RendererType = 'svg' | 'canvas' | 'auto';
 
@@ -284,6 +285,14 @@ export interface ChartOptions {
     description?: string;
   };
   plugins?: ChartPlugin[];
+  // Extended per-chart options (used by financial / bar /donut / gauge / heatmap)
+  volumePanel?: boolean;
+  indicators?: Array<{ type: string; period?: number; color?: string }>;
+  bar?: { mode?: 'grouped' | 'stacked'; [key: string]: unknown };
+  donut?: { centerText?: string; centerSubtext?: string; [key: string]: unknown };
+  gauge?: { min?: number; max?: number; [key: string]: unknown };
+  heatmap?: { colorRange?: [string, string]; showValues?: boolean; [key: string]: unknown };
+  [key: string]: unknown;
 }
 
 export interface ChartPlugin {

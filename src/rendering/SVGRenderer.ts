@@ -23,7 +23,9 @@ export class SVGRenderer implements Renderer {
     this.width = width;
     this.height = height;
 
-    this.container.innerHTML = '';
+    // Only remove previous SVG output — preserve tooltip / a11y overlays
+    this.svg?.remove();
+    this.svg = null;
 
     this.svg = document.createElementNS(SVG_NS, 'svg');
     this.svg.setAttribute('width', String(width));

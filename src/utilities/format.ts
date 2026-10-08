@@ -1,4 +1,5 @@
 export function formatNumber(val: number, decimals = 2): string {
+  if (!Number.isFinite(val)) return String(val);
   if (isNaN(val)) return '0';
   if (Math.abs(val) >= 1_000_000_000) return `${(val / 1_000_000_000).toFixed(decimals)}B`;
   if (Math.abs(val) >= 1_000_000) return `${(val / 1_000_000).toFixed(decimals)}M`;

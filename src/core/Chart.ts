@@ -83,6 +83,7 @@ export class Chart implements ChartInstance {
 
   private mergeOptions(options: ChartOptions): ChartOptions {
     return {
+      ...options,
       type: options.type,
       data: options.data ?? { series: [] },
       container: options.container,
@@ -165,13 +166,13 @@ export class Chart implements ChartInstance {
 
     switch (scaleType) {
       case 'time':
-        return new TimeScale({ domain: domain as [Date, Date], range });
+        return new TimeScale({ domain: domain as [Date, Date], range, min: cfg.min, max: cfg.max });
       case 'category':
-        return new CategoryScale({ domain: domain as string[], range });
+        return new CategoryScale({ domain: domain as string[], range, min: cfg.min, max: cfg.max });
       case 'log':
-        return new LogScale({ domain: domain as [number, number], range, logBase: cfg.logBase });
+        return new LogScale({ domain: domain as [number, number], range, min: cfg.min, max: cfg.max, logBase: cfg.logBase });
       default:
-        return new LinearScale({ domain: domain as [number, number], range, nice: cfg.nice });
+        return new LinearScale({ domain: domain as [number, number], range, min: cfg.min, max: cfg.max, nice: cfg.nice });
     }
   }
 
@@ -190,8 +191,13 @@ export class Chart implements ChartInstance {
 
   protected setupResizeObserver(): void {
     if (!this.options.responsive || typeof ResizeObserver === 'undefined') return;
+    let rafId = 0;
     this.resizeObserver = new ResizeObserver(() => {
-      this.resize();
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        rafId = 0;
+        this.resize();
+      });
     });
     this.resizeObserver.observe(this.container);
   }
@@ -289,6 +295,8 @@ export class Chart implements ChartInstance {
     pixelY: number
   ): { context: TooltipContext; seriesIndex: number; dataIndex: number } | null {
     const seriesList = this.options.data.series ?? [];
+    // Skip tooltip search for charts where x/y mapping is meaningless
+    if (['pie', 'donut', 'gauge', 'heatmap', 'funnel'].includes(this.options.type)) return null;
     const xScale = this.scales.get('x');
     const yScale = this.scales.get('y');
 
@@ -299,15 +307,20 @@ export class Chart implements ChartInstance {
 
     for (let sIdx = 0; sIdx < seriesList.length; sIdx++) {
       const s = seriesList[sIdx];
-      if (!s || s.visible === false) continue;
+      if (!s || s.visible === false || !Array.isArray(s.data)) continue;
 
-      for (let dIdx = 0; dIdx < s.data.length; dIdx++) {
+      // Decimate very large series so hover stays O(visible) not O(N)
+      const stride = s.data.length > 2000 ? Math.ceil(s.data.length / 2000) : 1;
+
+      for (let dIdx = 0; dIdx < s.data.length; dIdx += stride) {
         const pt = s.data[dIdx];
         if (!pt) continue;
 
-        const ptX = xScale.convert(pt.x ?? dIdx);
-        const ptY = yScale.convert(pt.y ?? pt.close ?? 0);
+        const rawX = pt.x ?? pt.time ?? pt.category ?? dIdx;
+        const ptX = xScale.convert(rawX as number | string | Date);
+        const ptY = yScale.convert(pt.y ?? pt.close ?? pt.value ?? 0);
 
+        if (!Number.isFinite(ptX) || !Number.isFinite(ptY)) continue;
         const dist = Math.hypot(pixelX - ptX, pixelY - ptY);
         if (dist < closestDist && dist < 60) {
           closestDist = dist;
@@ -318,8 +331,8 @@ export class Chart implements ChartInstance {
               series: s,
               dataIndex: dIdx,
               dataPoint: pt,
-              xValue: pt.x ?? dIdx,
-              yValue: pt.y ?? pt.close ?? 0
+              xValue: (pt.x ?? pt.time ?? dIdx) as number | string | Date,
+              yValue: (pt.y ?? pt.close ?? pt.value ?? 0) as number
             }
           };
         }
@@ -421,9 +434,12 @@ export class Chart implements ChartInstance {
 
   resize(): void {
     if (this.isDestroyed) return;
+    // Skip re-render when container is hidden (0-size) — caller can resize on tab show
+    if (this.container.clientWidth === 0 || this.container.clientHeight === 0) return;
     const newBounds = this.calculateBounds();
     const widthChanged = newBounds.width !== this.bounds.width;
     const heightChanged = newBounds.height !== this.bounds.height;
+    if (!widthChanged && !heightChanged) return;
 
     this.bounds = newBounds;
     this.renderer.init(this.container, this.bounds.width, this.bounds.height);
@@ -496,9 +512,11 @@ export class Chart implements ChartInstance {
   }
 
   removeData(count: number, seriesIndex = 0): void {
+    if (count <= 0) return;
     const series = this.options.data.series;
     if (series && series[seriesIndex]) {
-      series[seriesIndex].data.splice(-count);
+      const arr = series[seriesIndex].data;
+      arr.splice(Math.max(0, arr.length - count), count);
       this.updateScalesFromData();
       this.render();
       this.emit('dataremove', { chart: this, count, seriesIndex });
@@ -561,10 +579,10 @@ export class Chart implements ChartInstance {
   private async exportPNG(): Promise<Blob> {
     const canvas = this.container.querySelector('canvas');
     if (canvas) {
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         canvas.toBlob((blob) => {
           if (blob) resolve(blob);
-          else throw new ChartError('PNG export failed');
+          else reject(new ChartError('PNG export failed'));
         }, 'image/png');
       });
     }

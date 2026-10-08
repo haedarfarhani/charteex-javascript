@@ -31,7 +31,10 @@ export class CanvasRenderer implements Renderer {
     this.height = height;
     this.dpr = window.devicePixelRatio || 1;
 
-    this.container.innerHTML = '';
+    // Only remove previous canvas output — preserve tooltip / a11y overlays
+    this.canvas?.remove();
+    this.canvas = null;
+    this.ctx = null;
 
     this.canvas = document.createElement('canvas');
     this.canvas.width = width * this.dpr;

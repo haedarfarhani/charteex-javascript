@@ -1,7 +1,7 @@
 {
-  "name": "@smart-chart/core",
-  "version": "0.1.0",
-  "description": "Professional zero-dependency JavaScript charting library",
+  "name": "charteex-javascript",
+  "version": "0.1.1",
+  "description": "Charteex — professional zero-dependency JavaScript charting library (SVG + Canvas, financial charts, indicators)",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -9,16 +9,23 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     }
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
   "dependencies": {},
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 3000",
     "demo": "vite --host 0.0.0.0 --port 3000",
-    "build": "vite build --outDir dist --emptyOutDir && npm run build:declarations && node scripts/prepare-dist.cjs",
+    "build": "npm run build:declarations && vite build --outDir dist/bundle && node scripts/merge-dist.cjs && node scripts/prepare-dist.cjs",
     "build:declarations": "tsc",
+    "build:bundle": "vite build --outDir dist/bundle",
     "preview": "vite preview --host 0.0.0.0 --port 3000",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -27,17 +34,21 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "typecheck": "tsc --noEmit",
-    "clean": "rm -rf dist",
-    "pack:validate": "npm run build:declarations && node scripts/prepare-dist.cjs && npm pack --pack-destination dist --dry-run"
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "pack:validate": "npm run build && npm pack --dry-run",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "charts",
     "charting",
+    "charteex",
     "visualization",
     "svg",
     "canvas",
     "typescript",
-    "zero-dependency"
+    "zero-dependency",
+    "candlestick",
+    "trading"
   ],
   "author": "",
   "license": "MIT",

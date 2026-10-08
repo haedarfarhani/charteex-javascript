@@ -4,9 +4,11 @@ import { resolve } from 'path';
 export default defineConfig({
   root: '.',
   build: {
+    outDir: 'dist/bundle',
+    emptyOutDir: true,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'SmartChart',
+      name: 'Charteex',
       fileName: 'index',
       formats: ['es']
     },

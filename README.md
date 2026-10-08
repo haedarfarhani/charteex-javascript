@@ -1,10 +1,12 @@
-# Charteex JavaScript (`charteex-javascript` / `@smart-chart/core`)
+# Charteex 📊 — `charteex-javascript`
 
-> Professional, zero-dependency JavaScript and TypeScript charting engine and visual design system built from the ground up for modern web applications.
+> Professional, **zero-dependency** JavaScript + TypeScript charting engine for modern web apps.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success.svg)](https://haedarfarhani.github.io/charteex-javascript/)
+[![npm version](https://img.shields.io/npm/v/charteex-javascript.svg)](https://www.npmjs.com/package/charteex-javascript)
+[![npm downloads](https://img.shields.io/npm/dm/charteex-javascript.svg)](https://www.npmjs.com/package/charteex-javascript)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
-[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-success.svg)](https://www.npmjs.com/)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-success.svg)](https://www.npmjs.com/package/charteex-javascript)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
@@ -19,32 +21,46 @@ Experience the live interactive chart catalog, design token studio, and financia
 
 ## 🌟 Why Charteex?
 
-Most charting libraries either weigh down your bundles with hundreds of kilobytes of transitive dependencies, lock you into specific front-end frameworks (like React or Vue), or fail to offer first-class financial trading charts.
+Most charting libraries bloat your bundle with hundreds of kilobytes of transitive dependencies, lock you into a specific front-end framework, or treat financial charts as an afterthought.
 
-**SmartChart** changes that:
-- **Zero Runtime Dependencies**: No D3, Chart.js, Lodash, Moment, or external polyfills.
-- **Framework Agnostic**: Works natively in Vanilla JS, TypeScript, React, Vue, Svelte, Angular, Solid, Astro, Next.js, and Nuxt.
-- **Dual Rendering Engine**: Vector SVG for sharp, inspectable graphics and hardware-accelerated Canvas for high-volume datasets (10,000+ to 100,000+ points).
-- **First-Class Financial Engine**: Candlesticks, OHLC, Volume bars, and built-in technical indicators (SMA, EMA, WMA, RSI, MACD, Bollinger Bands, VWAP).
-- **TypeScript-First**: Strict type safety with comprehensive interfaces and discriminated unions.
-- **Extensible & Accessible**: Plugin system, ARIA support, custom formatters, crosshair, and responsive auto-resize.
+**Charteex** is different:
+
+- **Zero runtime dependencies** — no D3, no Lodash, no Moment, no polyfills.
+- **Framework agnostic** — Vanilla JS, TypeScript, React, Vue, Svelte, Angular, Solid, Astro, Next.js, Nuxt.
+- **Dual rendering engine** — crisp vector **SVG** for everyday charts, hardware-accelerated **Canvas** for 10,000+ point datasets (auto-switches by data size, or pick manually).
+- **First-class financial engine** — candlestick, OHLC, volume panels, and built-in indicators (SMA, EMA, WMA, RSI, MACD, Bollinger Bands, VWAP).
+- **TypeScript-first** — strict types for every option, series, event, and plugin.
+- **Accessible & extensible** — ARIA labels, keyboard-friendly legend, plugin system, crosshair, tooltips, zoom/pan, responsive auto-resize.
 
 ---
 
 ## 📦 Installation
 
 ```bash
-npm install @smart-chart/core
+npm install charteex-javascript
+# or
+yarn add charteex-javascript
+# or
+pnpm add charteex-javascript
+```
+
+**CDN (no build step):**
+
+```html
+<script type="module">
+  import { createChart } from 'https://unpkg.com/charteex-javascript@latest/dist/index.js';
+  // ... use createChart as below
+</script>
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### Basic Line Chart
+### Line chart (Vanilla JS / TypeScript)
 
 ```typescript
-import { createChart } from '@smart-chart/core';
+import { createChart } from 'charteex-javascript';
 
 const chart = createChart('#chart-container', {
   type: 'line',
@@ -69,12 +85,63 @@ const chart = createChart('#chart-container', {
 chart.render();
 ```
 
+### React
+
+```tsx
+import { useEffect, useRef } from 'react';
+import { createChart, type ChartInstance } from 'charteex-javascript';
+
+export function RevenueChart() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const chart: ChartInstance = createChart(ref.current, {
+      type: 'bar',
+      data: {
+        series: [{ name: 'Revenue', data: [{ x: 'Q1', y: 120 }, { x: 'Q2', y: 180 }] }]
+      }
+    });
+    chart.render();
+    return () => chart.destroy();
+  }, []);
+
+  return <div ref={ref} style={{ height: 400 }} />;
+}
+```
+
+### Vue
+
+```vue
+<script setup lang="ts">
+import { onMounted, onBeforeUnmount, ref } from 'vue';
+import { createChart, type ChartInstance } from 'charteex-javascript';
+
+const el = ref<HTMLElement | null>(null);
+let chart: ChartInstance | null = null;
+
+onMounted(() => {
+  if (!el.value) return;
+  chart = createChart(el.value, {
+    type: 'line',
+    data: { series: [{ name: 'Growth', data: [{ x: 1, y: 10 }, { x: 2, y: 25 }] }] }
+  });
+  chart.render();
+});
+onBeforeUnmount(() => chart?.destroy());
+</script>
+
+<template>
+  <div ref="el" style="height: 400px"></div>
+</template>
+```
+
 ---
 
 ## 📈 Financial Trading Chart
 
 ```typescript
-import { createChart } from '@smart-chart/core';
+import { createChart } from 'charteex-javascript';
 
 const chart = createChart('#trading-view', {
   type: 'candlestick',
@@ -98,24 +165,29 @@ const chart = createChart('#trading-view', {
 });
 
 chart.render();
+
+// Stream live candles
+chart.appendData({ time: Date.now(), open: 64750, high: 64900, low: 64600, close: 64820, volume: 940 });
 ```
 
 ---
 
-## 📊 Supported Chart Types (17+)
+## 📊 Supported Chart Types (19)
 
-| Category | Chart Types | Description |
+| Category | Types | Notes |
 |---|---|---|
-| **Basic** | `line`, `bar`, `column`, `area` | Smooth/straight lines, grouped/stacked bars, gradient fills |
-| **Circular** | `pie`, `donut`, `radar`, `polar` | Slices, center metrics, multi-axis polygons, rose petals |
-| **Data Viz** | `scatter`, `bubble`, `histogram`, `heatmap`, `gauge`, `funnel`, `boxplot` | Continuous/binned data, 2D matrix grids, tachometer dials, quartile stats |
-| **Financial** | `candlestick`, `ohlc`, `volume`, `financial` | Multi-panel trading candles, open/close ticks, indicators |
+| **Basic** | `line`, `bar`, `column`, `area` | Grouped/stacked bars, gradient fills |
+| **Circular** | `pie`, `donut`, `radar`, `polar` | Slices, center metrics, multi-axis polygons |
+| **Data Viz** | `scatter`, `bubble`, `histogram`, `heatmap`, `gauge`, `funnel`, `boxplot` | 2D grids, dials, quartile stats |
+| **Financial** | `candlestick`, `ohlc`, `volume`, `financial` | Multi-panel candles, indicators, volume |
+
+Use `type: 'financial'` for the full trading layout (price panel + volume panel + indicator overlays).
 
 ---
 
 ## 🧮 Technical Indicators
 
-SmartChart includes pure, unit-tested indicator calculation algorithms:
+Pure, dependency-free, unit-tested calculation functions — usable with or without rendering a chart:
 
 ```typescript
 import {
@@ -126,79 +198,131 @@ import {
   calculateMACD,
   calculateBollingerBands,
   calculateVWAP
-} from '@smart-chart/core';
+} from 'charteex-javascript';
 
-const closePrices = [44.2, 44.8, 45.1, 45.9, 46.3, 46.1, 46.8];
+const closes = [44.2, 44.8, 45.1, 45.9, 46.3, 46.1, 46.8];
 
-// Simple Moving Average
-const sma = calculateSMA(closePrices, 5);
+calculateSMA(closes, 5);                    // Simple Moving Average
+calculateEMA(closes, 12);                   // Exponential Moving Average
+calculateRSI(closes, 14);                   // Relative Strength Index
+calculateBollingerBands(closes, 20, 2);     // { upper, middle, lower }
+calculateMACD(closes, 12, 26, 9);           // { macd, signal, histogram }
+```
 
-// Relative Strength Index
-const rsi = calculateRSI(closePrices, 14);
+---
 
-// Bollinger Bands (Upper, Middle, Lower)
-const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);
+## 🎨 Themes
+
+9 built-in themes, plus custom theme support:
+
+```typescript
+import { createChart, createTheme } from 'charteex-javascript';
+
+// Built-in: 'light' | 'dark' | 'midnight' | 'minimal' |
+//           'professional' | 'financial' | 'glass' | 'enterprise' | 'system'
+const chart = createChart('#c', { type: 'line', data, theme: 'financial' });
+
+// Custom theme
+const brand = createTheme({ name: 'brand', primary: '#7c3aed', background: '#0f172a' });
+chart.update({ theme: brand });
 ```
 
 ---
 
 ## 🔌 Plugin System
 
-Extend chart functionality with custom plugins:
-
 ```typescript
-import { createChart, createWatermarkPlugin, createThresholdPlugin } from '@smart-chart/core';
+import { createChart, createWatermarkPlugin, createThresholdPlugin } from 'charteex-javascript';
 
 const chart = createChart('#chart', {
   type: 'line',
+  data,
   plugins: [
     createWatermarkPlugin({ text: 'DRAFT', opacity: 0.1 }),
     createThresholdPlugin({ yValue: 100, label: 'Target', color: '#ef4444' })
-  ],
-  data: { /* ... */ }
+  ]
+});
+
+// Custom plugin
+chart.use({
+  name: 'my-plugin',
+  install(instance) { /* hook into instance.on('render', ...) */ },
+  destroy() { /* cleanup */ }
 });
 ```
 
 ---
 
-## 🛠️ API Methods
+## 🛠️ API Reference
 
-| Method | Parameters | Description |
+| Method | Signature | Description |
 |---|---|---|
-| `render()` | — | Draws the chart and all axes, legends, and series |
-| `setData(data)` | `ChartData` | Updates data, recalibrates scales, and rerenders |
-| `appendData(point, seriesIndex)` | `DataPoint, number?` | Appends a single data point in real-time |
-| `update(options)` | `Partial<ChartOptions>` | Mutates options (theme, dimensions, margins, scales) |
-| `zoom(factor, cx, cy)` | `number, number?, number?` | Programmatic zoom |
-| `pan(deltaX, deltaY)` | `number, number` | Programmatic pan |
-| `resetZoom()` | — | Resets scales to original range |
-| `export(format)` | `'svg' \| 'png'` | Returns serialized SVG string or PNG Blob |
-| `on(event, handler)` | `string, Function` | Subscribes to events (`hover`, `click`, `datachange`, `zoom`, `pan`) |
-| `destroy()` | — | Cleans up DOM, event listeners, and timers |
+| `render()` | `() => void` | Draws axes, legend, and all series |
+| `setData(data)` | `(data: ChartData) => void` | Replaces data, recalibrates scales, rerenders |
+| `appendData(point, i?)` | `(point: DataPoint, seriesIndex?: number) => void` | Streams one point (live updates) |
+| `removeData(count, i?)` | `(count: number, seriesIndex?: number) => void` | Drops the oldest `count` points |
+| `update(options)` | `(options: Partial<ChartOptions>) => void` | Merges options (theme, size, axes…) and rerenders |
+| `zoom(f, cx?, cy?)` | `(factor: number, cx?: number, cy?: number) => void` | Programmatic zoom |
+| `pan(dx, dy)` | `(dx: number, dy: number) => void` | Programmatic pan |
+| `resetZoom()` | `() => void` | Restores original domains |
+| `export(fmt)` | `(fmt: 'svg' \| 'png') => Promise<string \| Blob>` | SVG string or PNG blob |
+| `on / off` | `(event, handler)` | `hover` · `click` · `datachange` · `zoom` · `pan` · `legendclick` |
+| `destroy()` | `() => void` | Removes listeners, observers, and DOM output |
+| `resize()` | `() => void` | Recalculates bounds (auto via `ResizeObserver` when `responsive: true`) |
+
+### Key options (`ChartOptions`)
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `type` | `ChartType` | — | Any of the 19 chart types |
+| `data` | `ChartData` | — | `{ series: [{ name, data, color, … }] }` |
+| `renderer` | `'svg' \| 'canvas' \| 'auto'` | `'auto'` | Auto picks Canvas above ~2,500 points |
+| `theme` | `ThemeMode \| Theme` | `'light'` | Built-in name or custom theme object |
+| `responsive` | `boolean` | `true` | Auto-resize with `ResizeObserver` |
+| `animation` | `{ enabled, duration, easing }` | on / 600ms | Entrance animation |
+| `axis.x / axis.y` | `AxisConfig` | linear | `type: 'linear' \| 'time' \| 'category' \| 'log'`, ticks, grid, min/max |
+| `tooltip` | `TooltipConfig` | enabled | Mode, formatter, custom render |
+| `crosshair` | `CrosshairConfig` | disabled | Snap-to-data lines |
+| `zoom / pan` | `ZoomConfig / PanConfig` | disabled | Wheel, drag, pinch |
+| `legend` | `LegendConfig` | bottom | Interactive show/hide |
+| `indicators` | `FinancialIndicatorConfig[]` | — | SMA / EMA / Bollinger overlays (financial) |
+| `volumePanel` | `boolean` | — | Volume sub-panel (financial) |
 
 ---
 
-## 🧪 Development & Testing
+## 📦 Bundle & Requirements
+
+- **Size:** ~127 kB minified (~29 kB gzip), **0 runtime dependencies**.
+- **Targets:** ES2022, modern browsers (Chrome/Edge/Firefox/Safari). SSR-safe import (no DOM access until `createChart`/`render` runs).
+- **Types:** full `.d.ts` declarations shipped in the package.
+
+---
+
+## 🧪 Development
 
 ```bash
-# Run development demo server
-npm run dev
-
-# Run Vitest unit & integration test suite
-npm run test
-
-# Typecheck TypeScript source
-npm run typecheck
-
-# Lint with ESLint
-npm run lint
-
-# Build production bundle & declaration files
-npm run build
+npm run dev            # demo playground at http://localhost:3000
+npm run test           # 57 unit tests (Vitest)
+npm run typecheck      # tsc --noEmit
+npm run lint           # ESLint
+npm run build          # bundle + declarations into dist/
 ```
+
+---
+
+## 🔄 Migrating from `@smart-chart/core`
+
+`charteex-javascript` is the published distribution of SmartChart. Only the import specifier changes:
+
+```diff
+- import { createChart } from '@smart-chart/core';
++ import { createChart } from 'charteex-javascript';
+```
+
+The legacy `createCharteex` alias is still exported (deprecated — prefer `createChart`).
 
 ---
 
 ## 📄 License
 
-MIT © SmartChart Contributors
+MIT © Charteex Contributors

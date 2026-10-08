@@ -37,11 +37,14 @@ export abstract class Scale {
 
   setRange(range: [number, number]): void {
     this.range = range;
+    this.originalRange = [...range];
   }
 
-  setDomain(domain: [number, number] | [Date, Date] | string[]): void {
+  setDomain(domain: [number, number] | [Date, Date] | string[], updateOriginal = false): void {
     this.domain = domain;
-    this.originalDomain = [...domain] as [number, number] | [Date, Date] | string[];
+    if (updateOriginal) {
+      this.originalDomain = [...domain] as [number, number] | [Date, Date] | string[];
+    }
   }
 
   getDomain(): [number, number] | [Date, Date] | string[] {
@@ -116,13 +119,15 @@ export class LinearScale extends Scale {
   override getTicks(count = 10): { value: number; label: string }[] {
     const [dMin, dMax] = this.domain as [number, number];
     const span = dMax - dMin;
-    if (span <= 0) return [{ value: dMin, label: String(dMin) }];
+    if (span <= 0 || !Number.isFinite(span)) return [{ value: dMin, label: String(dMin) }];
 
     const step = this.niceStep(span / count);
+    if (!Number.isFinite(step) || step <= 0) return [{ value: dMin, label: String(dMin) }];
     const start = Math.ceil(dMin / step) * step;
     const ticks: { value: number; label: string }[] = [];
+    const maxTicks = Math.min(200, Math.max(count * 4, 20));
 
-    for (let v = start; v <= dMax + step * 0.5; v += step) {
+    for (let v = start; v <= dMax + step * 0.5 && ticks.length < maxTicks; v += step) {
       ticks.push({ value: v, label: this.formatTick(v) });
     }
     return ticks;
@@ -204,7 +209,7 @@ export class TimeScale extends Scale {
     ];
 
     const targetStep = span / count;
-    let bestInterval = intervals[0];
+    let bestInterval = intervals[intervals.length - 1]!;
     for (const interval of intervals) {
       if (interval.step >= targetStep) {
         bestInterval = interval;
@@ -215,8 +220,9 @@ export class TimeScale extends Scale {
     const step = bestInterval!.step;
     const start = new Date(Math.ceil(dMin.getTime() / step) * step);
     const ticks: { value: Date; label: string }[] = [];
+    const maxTicks = Math.min(200, Math.max(count * 2, 20));
 
-    for (let time = start.getTime(); time <= dMax.getTime() + step * 0.5; time += step) {
+    for (let time = start.getTime(); time <= dMax.getTime() + step * 0.5 && ticks.length < maxTicks; time += step) {
       const date = new Date(time);
       ticks.push({ value: date, label: this.formatDate(date) });
     }
@@ -264,9 +270,14 @@ export class CategoryScale extends Scale {
     return this.categories[clamped] ?? '';
   }
 
-  override setDomain(domain: [number, number] | [Date, Date] | string[]): void {
-    super.setDomain(domain);
+  override setDomain(domain: [number, number] | [Date, Date] | string[], updateOriginal = false): void {
+    super.setDomain(domain, updateOriginal);
     this.categories = domain as string[];
+    this.updateBandWidth();
+  }
+
+  override setRange(range: [number, number]): void {
+    super.setRange(range);
     this.updateBandWidth();
   }
 
@@ -296,6 +307,26 @@ export class LogScale extends Scale {
     this.logBase = config.logBase ?? 10;
     if (config.domain) {
       this.domain = this.logDomain(config.domain as [number, number]);
+    }
+    if (config.min !== undefined || config.max !== undefined) {
+      const [dMin, dMax] = this.domain as [number, number];
+      const toLog = (v: number | Date): number => {
+        const n = v instanceof Date ? v.getTime() : (v as number);
+        return n > 0 ? Math.log(n) / Math.log(this.logBase) : NaN;
+      };
+      let newMin = dMin;
+      let newMax = dMax;
+      if (config.min !== undefined) {
+        const lv = toLog(config.min);
+        if (Number.isFinite(lv)) newMin = lv;
+      }
+      if (config.max !== undefined) {
+        const lv = toLog(config.max);
+        if (Number.isFinite(lv)) newMax = lv;
+      }
+      if (Number.isFinite(newMin) && Number.isFinite(newMax) && newMax > newMin) {
+        this.domain = [newMin, newMax];
+      }
     }
   }
 

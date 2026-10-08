@@ -12,7 +12,7 @@ export interface FinancialIndicatorConfig {
 }
 
 export interface FinancialChartOptions extends ChartOptions {
-  type: 'candlestick';
+  type: 'candlestick' | 'financial';
   indicators?: FinancialIndicatorConfig[];
   volumePanel?: boolean;
 }

@@ -19,6 +19,8 @@ export function polarToCartesian(cx: number, cy: number, radius: number, angleIn
  */
 export function describeArc(config: ArcConfig): string {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle } = config;
+  if (!Number.isFinite(cx) || !Number.isFinite(cy) || !Number.isFinite(outerRadius) || outerRadius <= 0) return '';
+  if (endAngle - startAngle <= 0.001) return '';
   const fullCircle = Math.abs(endAngle - startAngle) >= Math.PI * 1.9999;
 
   if (fullCircle) {
