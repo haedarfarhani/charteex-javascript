@@ -811,13 +811,33 @@ chart.render();</code></pre>
   </main>
 
   <script type="module">
-    import {
+    // Load Charteex module:
+    // 1. Try ./dist/index.js (GitHub Pages / production builds)
+    // 2. Try ./charteex.js (Root standalone bundle fallback)
+    // 3. Try ./src/index.ts (Vite development mode)
+    // 4. Try /src/index.ts (Vite root server fallback)
+    let charteex;
+    try {
+      charteex = await import('./dist/index.js');
+    } catch {
+      try {
+        charteex = await import('./charteex.js');
+      } catch {
+        try {
+          charteex = await import('./src/index.ts');
+        } catch {
+          charteex = await import('/src/index.ts');
+        }
+      }
+    }
+
+    const {
       createChart,
       createTheme,
       extendTheme,
       resolveTheme,
       themes
-    } from '/src/index.ts';
+    } = charteex;
 
     let currentThemeName = 'default';
     let currentDirection = 'ltr';

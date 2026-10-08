@@ -1,7 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
+# (dist is preserved for GitHub Pages static hosting)
 /tmp
 /out-tsc
 

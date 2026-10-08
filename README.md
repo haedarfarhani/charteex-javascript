@@ -1,14 +1,23 @@
-# SmartChart (`@smart-chart/core`)
+# Charteex JavaScript (`charteex-javascript` / `@smart-chart/core`)
 
-> Professional, zero-dependency JavaScript and TypeScript charting engine built from the ground up for modern web applications.
+> Professional, zero-dependency JavaScript and TypeScript charting engine and visual design system built from the ground up for modern web applications.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-success.svg)](https://haedarfarhani.github.io/charteex-javascript/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3+-blue.svg)](https://www.typescriptlang.org/)
 [![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-success.svg)](https://www.npmjs.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
-## 🌟 Why SmartChart?
+## 🌐 Live Demo & Interactive Showcase
+
+Experience the live interactive chart catalog, design token studio, and financial trading terminal directly in your browser:
+
+👉 **[https://haedarfarhani.github.io/charteex-javascript/](https://haedarfarhani.github.io/charteex-javascript/)**
+
+---
+
+## 🌟 Why Charteex?
 
 Most charting libraries either weigh down your bundles with hundreds of kilobytes of transitive dependencies, lock you into specific front-end frameworks (like React or Vue), or fail to offer first-class financial trading charts.
 

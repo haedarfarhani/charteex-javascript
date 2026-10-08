@@ -811,13 +811,33 @@ chart.render();</code></pre>
   </main>
 
   <script type="module">
-    import {
+    // Load Charteex module:
+    let charteex;
+    try {
+      charteex = await import('../dist/index.js');
+    } catch {
+      try {
+        charteex = await import('../charteex.js');
+      } catch {
+        try {
+          charteex = await import('./dist/index.js');
+        } catch {
+          try {
+            charteex = await import('../src/index.ts');
+          } catch {
+            charteex = await import('/src/index.ts');
+          }
+        }
+      }
+    }
+
+    const {
       createChart,
       createTheme,
       extendTheme,
       resolveTheme,
       themes
-    } from '/src/index.ts';
+    } = charteex;
 
     let currentThemeName = 'default';
     let currentDirection = 'ltr';

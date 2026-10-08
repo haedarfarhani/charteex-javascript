@@ -44,3 +44,11 @@ if (declarationFiles.length === 0) {
 } else {
   console.log('declaration files in dist/: ' + declarationFiles.join(', '));
 }
+
+// Keep a standalone charteex.js at the project root for static demos and GitHub Pages
+const distIndex = path.resolve(distDir, 'index.js');
+if (fs.existsSync(distIndex)) {
+  fs.copyFileSync(distIndex, path.resolve(__dirname, '..', 'charteex.js'));
+  console.log('Synced charteex.js for standalone static hosting');
+}
+
