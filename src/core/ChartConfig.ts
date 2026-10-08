@@ -243,7 +243,7 @@ export interface Theme {
   seriesColors: string[];
   fontFamily: string;
   fontSize: number;
-  tokens?: import('../design/tokens').DesignTokens;
+  tokens?: DesignTokens;
 }
 
 export interface ChartOptions {

@@ -3,34 +3,99 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartChart</title>
-  <meta name="description" content="Professional zero-dependency JavaScript charting library demo and visualization playground">
-  <meta property="og:title" content="SmartChart">
-  <meta property="og:description" content="Professional zero-dependency JavaScript charting library demo and visualization playground">
+  <title>Charteex JavaScript | Professional UI/UX Charting Engine</title>
+  <meta name="description" content="Charteex: Modern, zero-dependency, highly customizable JavaScript and TypeScript charting library with a premium design system.">
+  <meta property="og:title" content="Charteex JavaScript">
+  <meta property="og:description" content="Beautiful by default. Fully customizable by design. Zero-dependency TypeScript charting library.">
   <style>
     :root {
-      --bg-page: #f8fafc;
-      --bg-card: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --accent: #10b981;
-      --danger: #ef4444;
-      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-      --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --charteex-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --charteex-bg-canvas: #ffffff;
+      --charteex-bg-surface: #f8fafc;
+      --charteex-text-primary: #0f172a;
+      --charteex-text-secondary: #475569;
+      --charteex-text-muted: #94a3b8;
+      --charteex-border: #e2e8f0;
+      --charteex-primary: #2563eb;
+      --charteex-primary-hover: #1d4ed8;
+      --charteex-radius: 8px;
+      --charteex-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
     }
 
-    body.dark {
-      --bg-page: #0b0f19;
-      --bg-card: #131b2e;
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --border: #1e293b;
-      --primary: #3b82f6;
-      --primary-hover: #60a5fa;
-      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    body.theme-dark {
+      --charteex-bg-canvas: #0f172a;
+      --charteex-bg-surface: #1e293b;
+      --charteex-text-primary: #f8fafc;
+      --charteex-text-secondary: #cbd5e1;
+      --charteex-text-muted: #64748b;
+      --charteex-border: #334155;
+      --charteex-primary: #3b82f6;
+      --charteex-primary-hover: #60a5fa;
+      --charteex-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    }
+
+    body.theme-midnight {
+      --charteex-bg-canvas: #090d16;
+      --charteex-bg-surface: #0f172a;
+      --charteex-text-primary: #e2e8f0;
+      --charteex-text-secondary: #94a3b8;
+      --charteex-text-muted: #475569;
+      --charteex-border: #1e293b;
+      --charteex-primary: #60a5fa;
+      --charteex-primary-hover: #93c5fd;
+      --charteex-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    body.theme-minimal {
+      --charteex-bg-canvas: #ffffff;
+      --charteex-bg-surface: #fafafa;
+      --charteex-text-primary: #171717;
+      --charteex-text-secondary: #525252;
+      --charteex-text-muted: #a3a3a3;
+      --charteex-border: #e5e5e5;
+      --charteex-primary: #171717;
+      --charteex-primary-hover: #404040;
+      --charteex-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --charteex-radius: 4px;
+    }
+
+    body.theme-financial {
+      --charteex-bg-canvas: #131722;
+      --charteex-bg-surface: #1e222d;
+      --charteex-text-primary: #d1d4dc;
+      --charteex-text-secondary: #b2b5be;
+      --charteex-text-muted: #787b86;
+      --charteex-border: #2a2e39;
+      --charteex-primary: #2962ff;
+      --charteex-primary-hover: #1e53e5;
+      --charteex-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+      --charteex-radius: 4px;
+    }
+
+    body.theme-glass {
+      --charteex-bg-canvas: #f1f5f9;
+      --charteex-bg-surface: rgba(255, 255, 255, 0.85);
+      --charteex-text-primary: #1e293b;
+      --charteex-text-secondary: #475569;
+      --charteex-text-muted: #64748b;
+      --charteex-border: rgba(226, 232, 240, 0.8);
+      --charteex-primary: #6366f1;
+      --charteex-primary-hover: #4f46e5;
+      --charteex-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+      --charteex-radius: 12px;
+    }
+
+    body.theme-enterprise {
+      --charteex-bg-canvas: #ffffff;
+      --charteex-bg-surface: #f4f6f8;
+      --charteex-text-primary: #1c2536;
+      --charteex-text-secondary: #4f5e74;
+      --charteex-text-muted: #637381;
+      --charteex-border: #e0e6ed;
+      --charteex-primary: #0284c7;
+      --charteex-primary-hover: #0369a1;
+      --charteex-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --charteex-radius: 6px;
     }
 
     * {
@@ -40,25 +105,26 @@
     }
 
     body {
-      font-family: var(--font-family);
-      background: var(--bg-page);
-      color: var(--text-main);
+      font-family: var(--charteex-font-family);
+      background: var(--charteex-bg-canvas);
+      color: var(--charteex-text-primary);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      transition: background-color 0.2s, color 0.2s;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     header {
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+      background: var(--charteex-bg-surface);
+      border-bottom: 1px solid var(--charteex-border);
+      padding: 12px 28px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
       z-index: 50;
+      backdrop-filter: blur(12px);
     }
 
     .brand-group {
@@ -67,36 +133,45 @@
       gap: 12px;
     }
 
-    .brand-icon {
-      width: 32px;
-      height: 32px;
+    .brand-logo {
+      width: 34px;
+      height: 34px;
       background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
-      border-radius: 8px;
+      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 800;
-      font-size: 18px;
+      font-size: 19px;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
     }
 
     .brand-title {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.025em;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--charteex-text-muted);
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
     }
 
     .badge {
       font-size: 11px;
       font-weight: 600;
-      padding: 3px 8px;
+      padding: 3px 9px;
       border-radius: 9999px;
       background: #eff6ff;
       color: #2563eb;
       border: 1px solid #bfdbfe;
     }
 
-    body.dark .badge {
+    body.theme-dark .badge, body.theme-midnight .badge, body.theme-financial .badge {
       background: #1e293b;
       color: #60a5fa;
       border-color: #3b82f6;
@@ -107,7 +182,7 @@
       color: #059669;
       border-color: #a7f3d0;
     }
-    body.dark .badge-success {
+    body.theme-dark .badge-success, body.theme-midnight .badge-success, body.theme-financial .badge-success {
       background: #064e3b;
       color: #34d399;
       border-color: #059669;
@@ -115,33 +190,33 @@
 
     nav {
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .nav-btn {
       padding: 8px 14px;
-      border-radius: 6px;
+      border-radius: var(--charteex-radius);
       border: 1px solid transparent;
       background: transparent;
-      color: var(--text-muted);
+      color: var(--charteex-text-secondary);
       cursor: pointer;
       font-size: 13px;
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
     }
 
     .nav-btn:hover {
-      background: var(--border);
-      color: var(--text-main);
+      background: var(--charteex-border);
+      color: var(--charteex-text-primary);
     }
 
     .nav-btn.active {
-      background: var(--primary);
+      background: var(--charteex-primary);
       color: white;
-      border-color: var(--primary);
+      border-color: var(--charteex-primary);
     }
 
     .header-actions {
@@ -150,23 +225,23 @@
       gap: 10px;
     }
 
-    button, select {
+    button, select, input {
       font-family: inherit;
     }
 
     .btn {
       padding: 7px 14px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-      color: var(--text-main);
-      border-radius: 6px;
+      border: 1px solid var(--charteex-border);
+      background: var(--charteex-bg-surface);
+      color: var(--charteex-text-primary);
+      border-radius: var(--charteex-radius);
       cursor: pointer;
       font-size: 13px;
       font-weight: 500;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
     }
 
     .btn:hover {
@@ -174,28 +249,28 @@
     }
 
     .btn-primary {
-      background: var(--primary);
+      background: var(--charteex-primary);
       color: white;
-      border-color: var(--primary);
+      border-color: var(--charteex-primary);
     }
 
     .btn-primary:hover {
-      background: var(--primary-hover);
+      background: var(--charteex-primary-hover);
     }
 
     .select {
       padding: 7px 12px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      background: var(--bg-card);
-      color: var(--text-main);
+      border: 1px solid var(--charteex-border);
+      border-radius: var(--charteex-radius);
+      background: var(--charteex-bg-surface);
+      color: var(--charteex-text-primary);
       font-size: 13px;
       cursor: pointer;
     }
 
     main {
       flex: 1;
-      max-width: 1400px;
+      max-width: 1440px;
       width: 100%;
       margin: 0 auto;
       padding: 24px;
@@ -209,14 +284,15 @@
       display: block;
     }
 
-    /* Card styling */
+    /* Cards */
     .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      box-shadow: var(--card-shadow);
+      background: var(--charteex-bg-surface);
+      border: 1px solid var(--charteex-border);
+      border-radius: var(--charteex-radius);
+      box-shadow: var(--charteex-shadow);
       padding: 20px;
       margin-bottom: 24px;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
 
     .card-header {
@@ -249,6 +325,73 @@
       position: relative;
     }
 
+    /* Studio Playground Split */
+    .studio-layout {
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .studio-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .studio-panel {
+      background: var(--charteex-bg-surface);
+      border: 1px solid var(--charteex-border);
+      border-radius: var(--charteex-radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--charteex-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-swatch-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .color-swatch {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .color-swatch:hover {
+      transform: scale(1.15);
+    }
+
+    .color-swatch.active {
+      border-color: var(--charteex-text-primary);
+      transform: scale(1.1);
+    }
+
     /* Financial Dashboard */
     .market-header {
       display: grid;
@@ -258,16 +401,18 @@
     }
 
     .market-stat {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: var(--charteex-bg-surface);
+      border: 1px solid var(--charteex-border);
+      border-radius: var(--charteex-radius);
       padding: 14px;
     }
 
     .market-label {
-      font-size: 12px;
-      color: var(--text-muted);
+      font-size: 11px;
+      color: var(--charteex-text-muted);
       margin-bottom: 4px;
+      text-transform: uppercase;
+      font-weight: 600;
     }
 
     .market-value {
@@ -293,9 +438,9 @@
     }
 
     .bench-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 10px;
+      background: var(--charteex-bg-surface);
+      border: 1px solid var(--charteex-border);
+      border-radius: var(--charteex-radius);
       padding: 16px;
       text-align: center;
     }
@@ -303,54 +448,20 @@
     .bench-number {
       font-size: 32px;
       font-weight: 800;
-      color: var(--primary);
+      color: var(--charteex-primary);
       margin: 8px 0;
     }
 
-    /* Playground */
-    .playground-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 960px) {
-      .playground-split {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    pre code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
     .code-box {
-      background: #0f172a;
+      background: #090d16;
       color: #f8fafc;
       padding: 16px;
-      border-radius: 8px;
+      border-radius: var(--charteex-radius);
       overflow-x: auto;
-      max-height: 480px;
-    }
-
-    .doc-section {
-      margin-bottom: 30px;
-    }
-
-    .doc-section h2 {
-      font-size: 20px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 8px;
-    }
-
-    .doc-section p {
-      color: var(--text-muted);
-      font-size: 14px;
-      line-height: 1.6;
-      margin-bottom: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.5;
+      border: 1px solid #1e293b;
     }
 
     .pill-list {
@@ -363,18 +474,19 @@
     .pill {
       font-size: 12px;
       padding: 4px 10px;
-      background: var(--border);
+      background: var(--charteex-border);
       border-radius: 6px;
       font-weight: 500;
     }
   </style>
 </head>
-<body>
+<body class="theme-default">
   <header>
     <div class="brand-group">
-      <div class="brand-icon">S</div>
+      <div class="brand-logo">C</div>
       <div>
-        <div class="brand-title">SmartChart</div>
+        <div class="brand-title">Charteex</div>
+        <div class="brand-subtitle">Visual Design System</div>
       </div>
       <span class="badge">v0.1.0</span>
       <span class="badge badge-success">Zero Runtime Deps</span>
@@ -382,19 +494,26 @@
 
     <nav>
       <button class="nav-btn active" data-tab="catalog">📊 Chart Catalog</button>
+      <button class="nav-btn" data-tab="studio">🎨 Design Studio</button>
       <button class="nav-btn" data-tab="financial">📈 Financial Terminal</button>
       <button class="nav-btn" data-tab="benchmarks">⚡ Performance</button>
-      <button class="nav-btn" data-tab="playground">🛠️ Playground</button>
-      <button class="nav-btn" data-tab="docs">📖 Documentation</button>
+      <button class="nav-btn" data-tab="docs">📖 Design Tokens & API</button>
     </nav>
 
     <div class="header-actions">
-      <select id="globalRenderer" class="select">
-        <option value="auto">Auto Renderer</option>
-        <option value="svg">SVG Renderer</option>
-        <option value="canvas">Canvas Renderer</option>
+      <select id="globalThemeSelect" class="select" title="Preset Design Themes">
+        <option value="default" selected>Theme: Modern Light</option>
+        <option value="dark">Theme: Slate Dark</option>
+        <option value="midnight">Theme: Midnight Navy</option>
+        <option value="minimal">Theme: Minimal Mono</option>
+        <option value="professional">Theme: Professional FactSet</option>
+        <option value="financial">Theme: Trading Terminal</option>
+        <option value="glass">Theme: Glassmorphism</option>
+        <option value="enterprise">Theme: Enterprise Cobalt</option>
+        <option value="system">Theme: Auto System</option>
       </select>
-      <button id="themeToggle" class="btn" title="Toggle Light/Dark Theme">🌙 Dark</button>
+
+      <button id="directionToggle" class="btn" title="Toggle LTR / RTL Direction">LTR</button>
     </div>
   </header>
 
@@ -410,7 +529,7 @@
           <div class="controls-row">
             <select id="chartTypeSelect" class="select">
               <optgroup label="Basic">
-                <option value="line" selected>Line Chart</option>
+                <option value="line" selected>Line Chart (Spline / Area)</option>
                 <option value="bar">Bar Chart (Grouped)</option>
                 <option value="bar-stacked">Bar Chart (Stacked)</option>
                 <option value="column">Column Chart</option>
@@ -437,6 +556,11 @@
                 <option value="volume">Volume Chart</option>
               </optgroup>
             </select>
+            <select id="catalogRendererSelect" class="select">
+              <option value="auto">Renderer: Auto</option>
+              <option value="svg">Renderer: SVG</option>
+              <option value="canvas">Renderer: Canvas</option>
+            </select>
             <button class="btn btn-primary" id="randomizeBtn">🎲 Randomize Data</button>
             <button class="btn" id="exportSvgBtn">💾 Export SVG</button>
             <button class="btn" id="exportPngBtn">🖼️ Export PNG</button>
@@ -447,13 +571,106 @@
       </div>
     </div>
 
-    <!-- TAB 2: FINANCIAL TERMINAL -->
+    <!-- TAB 2: DESIGN STUDIO & TOKEN PLAYGROUND -->
+    <div id="studio" class="tab-content">
+      <div class="studio-layout">
+        <!-- Live Token Controls -->
+        <div class="studio-panel">
+          <div style="font-weight:700;font-size:15px;display:flex;justify-content:space-between;align-items:center;">
+            <span>🎨 Design Token Studio</span>
+            <span class="badge">Live Tokens</span>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Primary Series Accent</label>
+            <div class="color-swatch-list">
+              <div class="color-swatch active" style="background:#2563eb;" data-color="#2563eb"></div>
+              <div class="color-swatch" style="background:#10b981;" data-color="#10b981"></div>
+              <div class="color-swatch" style="background:#8b5cf6;" data-color="#8b5cf6"></div>
+              <div class="color-swatch" style="background:#f59e0b;" data-color="#f59e0b"></div>
+              <div class="color-swatch" style="background:#ec4899;" data-color="#ec4899"></div>
+              <div class="color-swatch" style="background:#06b6d4;" data-color="#06b6d4"></div>
+              <div class="color-swatch" style="background:#171717;" data-color="#171717"></div>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Typography Style</label>
+            <select id="studioFontSelect" class="select">
+              <option value="sans">System Sans-Serif</option>
+              <option value="mono">Monospace Terminal</option>
+              <option value="serif">Classic Editorial Serif</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Corner Radius</label>
+            <select id="studioRadiusSelect" class="select">
+              <option value="0">Sharp (0px)</option>
+              <option value="4">Subtle (4px)</option>
+              <option value="8" selected>Modern (8px)</option>
+              <option value="14">Smooth (14px)</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Grid Line Opacity</label>
+            <div class="control-row">
+              <input type="range" id="studioGridOpacity" min="0" max="1" step="0.05" value="0.5" style="flex:1;">
+              <span id="gridOpacityValue" style="font-size:12px;width:35px;text-align:right;">50%</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Tooltip Theme</label>
+            <select id="studioTooltipTheme" class="select">
+              <option value="auto">Auto Contrast</option>
+              <option value="dark">Dark Slate</option>
+              <option value="light">Crisp Light</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Animation Duration</label>
+            <select id="studioAnimationDuration" class="select">
+              <option value="0">Disabled (0ms)</option>
+              <option value="300">Fast (300ms)</option>
+              <option value="600" selected>Smooth (600ms)</option>
+              <option value="1000">Cinematic (1000ms)</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary" id="copyStudioConfigBtn" style="margin-top:10px;">📋 Copy Configuration</button>
+        </div>
+
+        <!-- Studio Preview & Inspector -->
+        <div style="display:flex;flex-direction:column;gap:20px;">
+          <div class="card" style="margin-bottom:0;">
+            <div class="card-header">
+              <div class="card-title">Live Preview (Interactive Legend: Click series to toggle, hover to highlight)</div>
+            </div>
+            <div id="studioChart" class="chart-container" style="height:360px;"></div>
+          </div>
+
+          <div class="card" style="margin-bottom:0;">
+            <div class="card-header">
+              <div class="card-title">Generated Charteex Code</div>
+            </div>
+            <div class="code-box">
+              <pre><code id="studioCodeBox">// Generated Charteex Configuration</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: FINANCIAL TERMINAL -->
     <div id="financial" class="tab-content">
       <div class="market-header">
         <div class="market-stat">
           <div class="market-label">Pair / Symbol</div>
           <div class="market-value">BTC / USD</div>
-          <div class="market-change">Bitcoin Core Index</div>
+          <div class="market-change">Bitcoin Global Index</div>
         </div>
         <div class="market-stat">
           <div class="market-label">Last Price</div>
@@ -493,11 +710,11 @@
       </div>
     </div>
 
-    <!-- TAB 3: PERFORMANCE BENCHMARKS -->
+    <!-- TAB 4: PERFORMANCE BENCHMARKS -->
     <div id="benchmarks" class="tab-content">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Real-Time Data Volume Stress Benchmark</div>
+          <div class="card-title">High-Frequency Data Volume Stress Benchmark</div>
           <div class="controls-row">
             <button class="btn btn-primary" data-bench="1000">Test 1,000 Points</button>
             <button class="btn btn-primary" data-bench="10000">Test 10,000 Points</button>
@@ -524,113 +741,70 @@
       </div>
     </div>
 
-    <!-- TAB 4: PLAYGROUND -->
-    <div id="playground" class="tab-content">
-      <div class="playground-split">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Live Preview</div>
-            <button class="btn btn-primary" id="copyCodeBtn">📋 Copy Config</button>
-          </div>
-          <div id="playgroundChart" class="chart-container" style="height: 380px;"></div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Generated TypeScript / JavaScript Configuration</div>
-          </div>
-          <div class="code-box">
-            <pre><code id="playgroundCode">// Generated SmartChart Configuration</code></pre>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 5: DOCUMENTATION -->
+    <!-- TAB 5: DOCUMENTATION & API -->
     <div id="docs" class="tab-content">
       <div class="card">
-        <div class="doc-section">
-          <h2>Overview & Product Philosophy</h2>
-          <p>SmartChart is an open-source, framework-agnostic charting library engineered from the ground up for modern JavaScript and TypeScript. Built with a zero runtime dependency architecture, it delivers high-performance vector SVG and hardware-accelerated Canvas rendering without requiring D3, Chart.js, or external date helpers.</p>
-          <div class="pill-list">
-            <span class="pill">TypeScript Native</span>
-            <span class="pill">Zero Runtime Dependencies</span>
-            <span class="pill">Dual Renderer (SVG / Canvas)</span>
-            <span class="pill">Financial & Technical Indicators</span>
-            <span class="pill">Accessible ARIA Support</span>
-            <span class="pill">100% Tree-Shakable</span>
-          </div>
+        <h2 style="margin-bottom:12px;">Charteex Design System Architecture</h2>
+        <p style="color:var(--charteex-text-secondary);font-size:14px;line-height:1.6;margin-bottom:16px;">
+          Charteex decouples visual tokens from rendering calculations. Themes provide semantic colors (background, text, axis, grid, tooltip, series, semantic), typography scales, spacing, radius, and shadows.
+        </p>
+
+        <div class="pill-list">
+          <span class="pill">Beautiful by Default</span>
+          <span class="pill">Design Tokens</span>
+          <span class="pill">Interactive Legends</span>
+          <span class="pill">RTL Aware</span>
+          <span class="pill">Accessible ARIA</span>
+          <span class="pill">Dual Renderer</span>
         </div>
 
-        <div class="doc-section">
-          <h2>Quick Start</h2>
-          <div class="code-box">
-            <pre><code>import { createChart } from '@smart-chart/core';
+        <h3 style="margin:20px 0 10px 0;font-size:16px;">Custom Theme Creation</h3>
+        <div class="code-box">
+          <pre><code>import { createChart, createTheme, extendTheme } from 'charteex-javascript';
+
+// 1. Extend an existing theme
+const myDarkTheme = extendTheme('midnight', {
+  primary: '#8b5cf6',
+  seriesColors: ['#8b5cf6', '#10b981', '#f59e0b']
+});
+
+// 2. Or create a custom theme from scratch
+const brandTheme = createTheme({
+  name: 'corporate',
+  tokens: {
+    colors: {
+      series: ['#0284c7', '#0d9488', '#d97706']
+    },
+    radius: { md: 10 }
+  }
+});
 
 const chart = createChart('#chart', {
   type: 'line',
-  data: {
-    series: [
-      { name: 'Revenue', data: [{ x: 1, y: 100 }, { x: 2, y: 140 }, { x: 3, y: 220 }] }
-    ]
-  },
-  theme: 'dark',
-  renderer: 'auto',
-  animation: { enabled: true, duration: 600 }
+  theme: brandTheme,
+  data: { /* ... */ }
 });
-
 chart.render();</code></pre>
-          </div>
         </div>
 
-        <div class="doc-section">
-          <h2>Available Chart Types (17+)</h2>
-          <p>Every chart type is a modular extension of the core charting engine:</p>
-          <div class="pill-list">
-            <span class="pill">line</span>
-            <span class="pill">bar</span>
-            <span class="pill">column</span>
-            <span class="pill">area</span>
-            <span class="pill">pie</span>
-            <span class="pill">donut</span>
-            <span class="pill">radar</span>
-            <span class="pill">polar</span>
-            <span class="pill">scatter</span>
-            <span class="pill">bubble</span>
-            <span class="pill">histogram</span>
-            <span class="pill">heatmap</span>
-            <span class="pill">gauge</span>
-            <span class="pill">funnel</span>
-            <span class="pill">boxplot</span>
-            <span class="pill">candlestick</span>
-            <span class="pill">ohlc</span>
-            <span class="pill">volume</span>
-          </div>
-        </div>
-
-        <div class="doc-section">
-          <h2>Technical Indicators API</h2>
-          <p>Independently testable technical analysis calculation algorithms:</p>
-          <div class="code-box">
-            <pre><code>import {
-  calculateSMA,
-  calculateEMA,
-  calculateWMA,
-  calculateRSI,
-  calculateMACD,
-  calculateBollingerBands,
-  calculateVWAP
-} from '@smart-chart/core';
-
-// Calculate 20-period Moving Average
-const sma = calculateSMA(closePrices, 20);
-
-// Calculate 14-period Relative Strength Index
-const rsi = calculateRSI(closePrices, 14);
-
-// Calculate Bollinger Bands
-const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</code></pre>
-          </div>
+        <h3 style="margin:20px 0 10px 0;font-size:16px;">CSS Custom Properties</h3>
+        <p style="color:var(--charteex-text-secondary);font-size:13.5px;margin-bottom:10px;">
+          Charteex exports standard CSS variables that can be inspected and reused across your web components:
+        </p>
+        <div class="code-box">
+          <pre><code>--charteex-font-family
+--charteex-bg-canvas
+--charteex-bg-plot
+--charteex-bg-surface
+--charteex-text-primary
+--charteex-text-secondary
+--charteex-axis-line
+--charteex-grid-major
+--charteex-tooltip-bg
+--charteex-tooltip-border
+--charteex-radius-md
+--charteex-semantic-positive
+--charteex-semantic-negative</code></pre>
         </div>
       </div>
     </div>
@@ -639,16 +813,17 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
   <script type="module">
     import {
       createChart,
-      calculateSMA,
-      calculateEMA,
-      calculateBollingerBands,
-      calculateRSI
+      createTheme,
+      extendTheme,
+      resolveTheme,
+      themes
     } from '/src/index.ts';
 
-    let currentTheme = 'light';
+    let currentThemeName = 'default';
+    let currentDirection = 'ltr';
     let currentRenderer = 'auto';
 
-    // TAB SWITCHING
+    // NAV TABS
     const navButtons = document.querySelectorAll('.nav-btn');
     const tabContents = document.querySelectorAll('.tab-content');
 
@@ -661,34 +836,33 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
         document.getElementById(target)?.classList.add('active');
 
         if (target === 'catalog') initCatalogChart();
+        if (target === 'studio') updateStudio();
         if (target === 'financial') initFinancialChart();
         if (target === 'benchmarks') runBenchmark(1000);
-        if (target === 'playground') updatePlayground();
       });
     });
 
-    // THEME TOGGLE
-    const themeBtn = document.getElementById('themeToggle');
-    themeBtn.addEventListener('click', () => {
-      currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-      if (currentTheme === 'dark') {
-        document.body.classList.add('dark');
-        themeBtn.textContent = '☀️ Light';
-      } else {
-        document.body.classList.remove('dark');
-        themeBtn.textContent = '🌙 Dark';
-      }
-      activeCatalogChart?.update({ theme: currentTheme });
-      activeFinChart?.update({ theme: currentTheme });
-      activeBenchChart?.update({ theme: currentTheme });
-      activePlaygroundChart?.update({ theme: currentTheme });
+    // THEME PRESET SWITCHER
+    const themeSelect = document.getElementById('globalThemeSelect');
+    themeSelect.addEventListener('change', (e) => {
+      currentThemeName = e.target.value;
+      document.body.className = `theme-${currentThemeName}`;
+
+      initCatalogChart();
+      updateStudio();
+      initFinancialChart();
     });
 
-    // RENDERER SELECT
-    document.getElementById('globalRenderer').addEventListener('change', (e) => {
-      currentRenderer = e.target.value;
-      initCatalogChart();
-      initFinancialChart();
+    // LTR / RTL TOGGLE
+    const directionBtn = document.getElementById('directionToggle');
+    directionBtn.addEventListener('click', () => {
+      currentDirection = currentDirection === 'ltr' ? 'rtl' : 'ltr';
+      directionBtn.textContent = currentDirection.toUpperCase();
+      document.documentElement.dir = currentDirection;
+
+      activeCatalogChart?.update({ direction: currentDirection });
+      activeStudioChart?.update({ direction: currentDirection });
+      activeFinChart?.update({ direction: currentDirection });
     });
 
     // -------------------------------------------------------------
@@ -701,12 +875,12 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
         return {
           series: [
             {
-              name: 'Series Alpha',
+              name: 'Enterprise Cloud',
               data: Array.from({ length: 16 }, (_, i) => ({ x: i, y: Math.round(50 + Math.sin(i / 2) * 30 + Math.random() * 15) })),
               color: '#2563eb'
             },
             {
-              name: 'Series Beta',
+              name: 'Edge Nodes',
               data: Array.from({ length: 16 }, (_, i) => ({ x: i, y: Math.round(30 + Math.cos(i / 2) * 20 + Math.random() * 10) })),
               color: '#10b981'
             }
@@ -917,12 +1091,13 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
       const options = {
         type: actualType,
         data,
-        theme: currentTheme,
-        renderer: currentRenderer,
+        theme: currentThemeName,
+        renderer: document.getElementById('catalogRendererSelect').value,
+        direction: currentDirection,
         responsive: true,
         animation: { enabled: true, duration: 500 },
         title: { text: select.options[select.selectedIndex].text },
-        legend: { enabled: true, position: 'bottom' },
+        legend: { enabled: true, position: 'bottom', interactive: true },
         tooltip: { enabled: true },
         crosshair: { enabled: actualType === 'line' || actualType === 'candlestick' }
       };
@@ -941,6 +1116,7 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
     }
 
     document.getElementById('chartTypeSelect').addEventListener('change', initCatalogChart);
+    document.getElementById('catalogRendererSelect').addEventListener('change', initCatalogChart);
     document.getElementById('randomizeBtn').addEventListener('click', initCatalogChart);
 
     document.getElementById('exportSvgBtn').addEventListener('click', async () => {
@@ -950,7 +1126,7 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `smartchart-export.svg`;
+        a.download = `charteex-export.svg`;
         a.click();
         URL.revokeObjectURL(url);
       } catch (err) {
@@ -964,12 +1140,115 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `smartchart-export.png`;
+        a.download = `charteex-export.png`;
         a.click();
         URL.revokeObjectURL(url);
       } catch (err) {
         console.warn(err);
       }
+    });
+
+    // -------------------------------------------------------------
+    // DESIGN STUDIO PLAYGROUND
+    // -------------------------------------------------------------
+    let activeStudioChart = null;
+    let studioPrimaryColor = '#2563eb';
+
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+        studioPrimaryColor = swatch.dataset.color;
+        updateStudio();
+      });
+    });
+
+    ['studioFontSelect', 'studioRadiusSelect', 'studioTooltipTheme', 'studioAnimationDuration'].forEach(id => {
+      document.getElementById(id).addEventListener('change', updateStudio);
+    });
+
+    document.getElementById('studioGridOpacity').addEventListener('input', (e) => {
+      document.getElementById('gridOpacityValue').textContent = `${Math.round(e.target.value * 100)}%`;
+      updateStudio();
+    });
+
+    function updateStudio() {
+      if (activeStudioChart) {
+        activeStudioChart.destroy();
+        activeStudioChart = null;
+      }
+
+      const fontVal = document.getElementById('studioFontSelect').value;
+      const fontFamily = fontVal === 'mono'
+        ? 'ui-monospace, monospace'
+        : (fontVal === 'serif' ? 'Georgia, serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif');
+
+      const radius = parseInt(document.getElementById('studioRadiusSelect').value, 10);
+      const gridOpacity = parseFloat(document.getElementById('studioGridOpacity').value);
+      const tooltipTheme = document.getElementById('studioTooltipTheme').value;
+      const animDuration = parseInt(document.getElementById('studioAnimationDuration').value, 10);
+
+      const customTheme = createTheme({
+        name: 'studio-custom',
+        background: currentThemeName === 'dark' || currentThemeName === 'midnight' ? '#0f172a' : '#ffffff',
+        fontFamily,
+        tokens: {
+          colors: {
+            series: [studioPrimaryColor, '#10b981', '#f59e0b', '#8b5cf6']
+          },
+          radius: { md: radius },
+          typography: { fontFamily }
+        }
+      });
+
+      const config = {
+        type: 'line',
+        data: {
+          series: [
+            {
+              name: 'Series Alpha',
+              data: [
+                { x: 'Jan', y: 32 }, { x: 'Feb', y: 45 }, { x: 'Mar', y: 40 },
+                { x: 'Apr', y: 68 }, { x: 'May', y: 55 }, { x: 'Jun', y: 85 }
+              ],
+              color: studioPrimaryColor
+            },
+            {
+              name: 'Series Beta',
+              data: [
+                { x: 'Jan', y: 20 }, { x: 'Feb', y: 30 }, { x: 'Mar', y: 28 },
+                { x: 'Apr', y: 48 }, { x: 'May', y: 42 }, { x: 'Jun', y: 62 }
+              ],
+              color: '#10b981'
+            }
+          ]
+        },
+        theme: customTheme,
+        direction: currentDirection,
+        responsive: true,
+        animation: { enabled: animDuration > 0, duration: animDuration },
+        legend: { enabled: true, position: 'bottom', interactive: true },
+        tooltip: { enabled: true, theme: tooltipTheme, borderRadius: radius },
+        crosshair: { enabled: true },
+        axis: {
+          x: { grid: gridOpacity > 0 },
+          y: { grid: gridOpacity > 0 }
+        }
+      };
+
+      activeStudioChart = createChart('#studioChart', config);
+      activeStudioChart.render();
+
+      const codeStr = `import { createChart, createTheme } from 'charteex-javascript';\n\nconst theme = createTheme({\n  tokens: {\n    colors: { series: ['${studioPrimaryColor}', '#10b981'] },\n    radius: { md: ${radius} },\n    typography: { fontFamily: '${fontFamily}' }\n  }\n});\n\nconst chart = createChart('#chart', {\n  type: 'line',\n  theme,\n  direction: '${currentDirection}',\n  animation: { enabled: ${animDuration > 0}, duration: ${animDuration} },\n  legend: { interactive: true }\n});\n\nchart.render();`;
+      document.getElementById('studioCodeBox').textContent = codeStr;
+    }
+
+    document.getElementById('copyStudioConfigBtn').addEventListener('click', () => {
+      const text = document.getElementById('studioCodeBox').textContent;
+      navigator.clipboard.writeText(text);
+      const btn = document.getElementById('copyStudioConfigBtn');
+      btn.textContent = '✅ Copied to Clipboard!';
+      setTimeout(() => { btn.textContent = '📋 Copy Configuration'; }, 2000);
     });
 
     // -------------------------------------------------------------
@@ -1039,8 +1318,8 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
             { name: 'BTC/USD', data: finCandles }
           ]
         },
-        theme: currentTheme,
-        renderer: currentRenderer,
+        theme: currentThemeName === 'financial' ? 'financial' : currentThemeName,
+        direction: currentDirection,
         responsive: true,
         crosshair: { enabled: true, vertical: true, horizontal: true },
         tooltip: { enabled: true }
@@ -1117,11 +1396,11 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
 
       activeBenchChart = createChart('#benchChart', {
         type: 'line',
-        renderer: 'canvas', // Use canvas for fast multi-thousand point rendering
+        renderer: 'canvas',
         data: {
           series: [{ name: 'High Frequency Sensor Feed', data: pts, color: '#2563eb' }]
         },
-        theme: currentTheme,
+        theme: currentThemeName,
         animation: { enabled: false }
       });
 
@@ -1140,59 +1419,7 @@ const { upper, middle, lower } = calculateBollingerBands(closePrices, 20, 2);</c
       });
     });
 
-    // -------------------------------------------------------------
-    // PLAYGROUND TAB IMPLEMENTATION
-    // -------------------------------------------------------------
-    let activePlaygroundChart = null;
-
-    function updatePlayground() {
-      if (activePlaygroundChart) {
-        activePlaygroundChart.destroy();
-        activePlaygroundChart = null;
-      }
-
-      const config = {
-        type: 'line',
-        data: {
-          series: [
-            {
-              name: 'Alpha Growth',
-              data: [
-                { x: 1, y: 35 }, { x: 2, y: 55 }, { x: 3, y: 40 },
-                { x: 4, y: 80 }, { x: 5, y: 65 }, { x: 6, y: 110 }
-              ],
-              color: '#2563eb'
-            }
-          ]
-        },
-        theme: currentTheme,
-        renderer: currentRenderer,
-        responsive: true,
-        animation: { enabled: true, duration: 600, easing: 'easeOut' },
-        axis: {
-          x: { type: 'linear', position: 'bottom', grid: true },
-          y: { type: 'linear', position: 'left', grid: true }
-        },
-        tooltip: { enabled: true, mode: 'nearest' },
-        crosshair: { enabled: true }
-      };
-
-      activePlaygroundChart = createChart('#playgroundChart', config);
-      activePlaygroundChart.render();
-
-      const codeStr = `import { createChart } from '@smart-chart/core';\n\nconst chart = createChart('#chart', ${JSON.stringify(config, null, 2)});\n\nchart.render();`;
-      document.getElementById('playgroundCode').textContent = codeStr;
-    }
-
-    document.getElementById('copyCodeBtn').addEventListener('click', () => {
-      const text = document.getElementById('playgroundCode').textContent;
-      navigator.clipboard.writeText(text);
-      const btn = document.getElementById('copyCodeBtn');
-      btn.textContent = '✅ Copied!';
-      setTimeout(() => { btn.textContent = '📋 Copy Config'; }, 2000);
-    });
-
-    // Initial boot
+    // Boot
     initCatalogChart();
   </script>
 </body>
